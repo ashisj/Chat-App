@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <h1>Signup</h1>
+    <span id="registrationMessage"></span>
+    <form id="registrationForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" class="form-control">
+        <span id="userNameError" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control">
+        <span id="nameError" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" class="form-control">
+        <span id="emailError" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label for="email">Password</label>
+        <input type="password" id="password" class="form-control">
+        <span id="passwordError" class="text-danger"></span>
+      </div>
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+      <button type="submit" class="btn btn-primary" id="signup">Sign Up</button>
+    </form>
+  </div>
+</div>
+<script src='/javascripts/signup.js'/></script>
