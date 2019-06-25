@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -9,11 +10,35 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
+
+var http = require("http").Server(app)
+global.io= require("socket.io")(http)
+
 var indexRouter = require('./routes/index');
 var userApiRoute = require('./api/routes/userRoute');
+var chatApiRoute = require('./api/routes/chatRoute');
 
 require('./config.js')
-var app = express();
+
+global.loginUsers = []
+
+io.on("connection", (socket) => {
+  socket.on('username', function(username) {
+      socket.username = username;
+      if(loginUsers.indexOf(username) == -1){
+          loginUsers.push(username);
+      }
+      //io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
+      io.emit('is_online',loginUsers)
+  });
+
+  socket.on('disconnect', function(username) {
+        let index = loginUsers.indexOf(socket.username);
+        if (index !== -1) loginUsers.splice(index, 1);
+        io.emit('is_online',loginUsers)
+      //io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+  })
+})
 
 //Database connection
 mongoose.connect(process.env.MONGODB_CONNECTION, {useNewUrlParser: true},(err) =>{
@@ -53,6 +78,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api/chat', chatApiRoute);
 app.use('/api/user', userApiRoute);
 app.use('/', indexRouter);
 
@@ -72,4 +98,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+//"start": "nodemon ./bin/www"
+//module.exports = app;
+const server = http.listen(3000,()=>{
+  console.log("Listening to the port:3000");
+})

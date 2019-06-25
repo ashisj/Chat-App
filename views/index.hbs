@@ -1,4 +1,25 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
-{{user.email}}
-{{ashis}}
+<div class="row">
+    <div class="col-sm-9">
+        <div class="header"></div>
+        <div id="messages"></div>
+        <form class="row" style="margin-top: 2px">
+        <div class="col-sm-11">
+            <input id="name" type="hidden" value="{{user.name}}">
+            <input id="username" type="hidden" value="{{user.username}}">
+            <input id="message" autocomplete="off" autofocus="on" placeholder="type your message here..." class="form-control" />
+        </div>
+        <div class="col-sm-1">
+            <button id="send" class="btn btn-success" style="padding: auto 4px; float:right">Send</button>
+        </div>
+        </form>
+    </div>
+    <div class="col-sm-3">
+        <div class="inbox_msg"
+            <div id="onlineUSers"></div>
+        </div>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+
+{{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script> --}}
+<script src='/javascripts/chat.js'/></script>
