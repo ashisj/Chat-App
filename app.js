@@ -20,22 +20,34 @@ var chatApiRoute = require('./api/routes/chatRoute');
 
 require('./config.js')
 
-global.loginUsers = []
+global.onlineUsers = {}
+global.offlineUsers = {}
 
 io.on("connection", (socket) => {
-  socket.on('username', function(username) {
+  socket.on('username',function(username) {
       socket.username = username;
-      if(loginUsers.indexOf(username) == -1){
-          loginUsers.push(username);
+      if(socket.username in offlineUsers){
+        onlineUsers[socket.username] = offlineUsers[socket.username]
+        io.emit('online',onlineUsers)
+      } else {
+        userApiRoute.loggedInUsers(socket.username,(err,user) => {
+            onlineUsers[socket.username] = user.name
+            io.emit('online',onlineUsers)
+        });
       }
       //io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
-      io.emit('is_online',loginUsers)
+  });
+
+  socket.on('onlineUsers',()=>{
+    io.emit('online',onlineUsers);
   });
 
   socket.on('disconnect', function(username) {
-        let index = loginUsers.indexOf(socket.username);
-        if (index !== -1) loginUsers.splice(index, 1);
-        io.emit('is_online',loginUsers)
+        if(!(socket.username in offlineUsers) && socket.username in onlineUsers){
+            offlineUsers[socket.username] = onlineUsers[socket.username]
+        }
+        delete onlineUsers[socket.username];
+        io.emit('online',onlineUsers)
       //io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
   })
 })
@@ -57,7 +69,7 @@ app.set('view engine', '.hbs');
 
 app.use(logger('dev'));
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false })); 
+app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -73,7 +85,7 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   if (req.cookies.user_sid && !req.session.user) {
-      res.clearCookie('user_sid');        
+      res.clearCookie('user_sid');
   }
   next();
 });

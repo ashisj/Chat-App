@@ -50,7 +50,7 @@ exports.username = (req,res,next) => {
       res.status(200).json({message:'UserName is unique'});
     }
   })
-} 
+}
 
 exports.email = (req,res,next) => {
   User.findOne({'email':req.params.email},(err,user) => {
@@ -63,7 +63,7 @@ exports.email = (req,res,next) => {
       res.status(200).json({message:'Email is unique'});
     }
   })
-} 
+}
 
 exports.login = (req,res,next) => {
   const errors = validationResult(req);
@@ -98,3 +98,12 @@ exports.login = (req,res,next) => {
     }
   });
 };
+
+exports.loggedInUser = (username,done) => {
+  User.findOne({'username':username},{_id:0,name:1},(err,user) => {
+    if(err){
+       return done(err,null);
+    }
+    return done(null ,user);
+  })
+}
