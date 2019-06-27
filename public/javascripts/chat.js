@@ -1,47 +1,33 @@
-$("document").ready(function(){
-
-    $("#message").emojioneArea({
-      pickerPosition : "right"
-    })
-
-    $("#ashis").on('click',()=>{
-      $("#ashis").toggleClass("as-a")
-    })
-
-    var header = $(".header")  
-    var socket = io()
-
+$('document').ready(function(){
+    const messageInput = $('#message');
+    const onlineUsersButton = $("#onlineUsersButton");
+    const onlineUsers = $('#onlineUSers');
+    const messageBox = $("#messages");
+    const msgForm = $('#msgForm');
+    const header = $('.header');
     const username = $("#username").val();
+    const name = $("#name").val();
+    var onlineUsersData ={}
+
+    const socket = io()
+
+    messageInput.emojiPicker({
+      width: messageInput.width(),
+      height: '200px',
+      container : 'form .col-sm-11'
+    });
 
     socket.emit('username', username);
-    socket.emit("onlineUsers");
-    $("#message").on("keypress",()=>{
-      socket.emit("typing",$("#name").val())
-    })
-    
-    socket.on("chat", addChat)
+    socket.emit('onlineUsers');
+
+    socket.on('chat', addChat)
     socket.on('typing',(data) => {
       header.html(`<p><em> ${data} is typing a message...</em></p>`);
     })
-    
-    //to be deleted after fix user online
-    s = ''
-    $.each([1,2,3,4,1,2,],(a,b) => {
-      s += `<div class="chat_list">
-      <div class="chat_people">
-        <div class="chat_img"></div>
-        <div class="chat_ib"> ${b} </div>
-        <span class="online_icon"></span>
-      </div>
-    </div>
-  ` 
-
-
-    })
-    
     socket.on('online', (user) => {
-        let str = ""
-        let msg = ``
+        onlineUsersData = user;
+        let str = ''
+        let msg = ''
         $.each(user,(key,name)=>{
           if(key != username){
             msg = `<div class="chat_list">
@@ -55,38 +41,47 @@ $("document").ready(function(){
             str += msg
           }
         });
-        
-        //$('#onlineUSers').html(str)
+        if(str == ''){
+            onlineUsers.html("No one is available");
+        } else{
+            onlineUsers.html(str);
+        }
     });
-    //to be deleted after fix user online
-    $('#onlineUSers').html(s)
-    
+
+    onlineUsersButton.on('click',()=>{
+      onlineUsersButton.toggleClass('online-user-button-position')
+    })
+    messageInput.on('keypress',()=>{
+      socket.emit('typing',name)
+    })
+
     function getChats() {
-         $.get("/api/chat", (chats) => {
+         $.get('/api/chat', (chats) => {
              chats.forEach(addChat)
          })
     }
+
     getChats();
 
     function postChat(chat){
-      $.post("/api/chat", chat,()=>{
-        //$("#message").val("")
-        $(".emojionearea-editor").html("")
+      $.post('/api/chat', chat,()=>{
+        messageInput.val("")
       })
     }
 
     function addChat(chatObj){
+        header.html('')
         let time = new Date(Number(chatObj.time) || 0);
-        let day = ""
+        let day = ''
         if(time.toLocaleDateString() == new Date().toLocaleDateString()){
-          day = "Today"
+          day = 'Today'
         } else if(time.toLocaleDateString() == new Date(new Date().setDate(new Date().getDate()-1)).toLocaleDateString()){
           day='Yesterday'
         } else{
-          x = time.toDateString().substr(4).split(" ")
+          x = time.toDateString().substr(4).split(' ')
           day = `${x[1]} ${x[0]},${x[2]}`
         }
-                        
+
         if(chatObj.username == username){
           msg = `<div class="outgoing_msg">
                     <div class="sent_msg">
@@ -94,7 +89,7 @@ $("document").ready(function(){
                       <span class="time_date"> ${time.toLocaleTimeString()}    |   ${day} </span>
                     </div>
                   </div>`;
-          $("#messages").append(msg)
+          messageBox.append(msg)
         } else {
           msg = `<div class="incoming_msg">
                     <div class="incoming_msg_img">${chatObj.name} </div>
@@ -105,24 +100,22 @@ $("document").ready(function(){
                       </div>
                     </div>
                   </div>`;
-          $("#messages").append(msg);
-          //$("#messages").animate({ scrollTop: document.getElementById("messages").scrollHeight }, "slow");
+          messageBox.append(msg);
         }
-        $("#messages").animate({ scrollTop: document.getElementById("messages").scrollHeight}, 5);
+        messageBox.animate({ scrollTop: document.getElementById('messages').scrollHeight}, 5);
     }
 
-    $("#send").click((e) => {
+    msgForm.submit((e) =>{
         e.preventDefault();
         var chatMessage = {
-            name : $("#name").val(),
+            name : name,
             username: username,
-            message: $("#message").val()
+            message: messageInput.val()
         }
         postChat(chatMessage)
     });
 
     setInterval(()=>{
-      header.html("")
+      header.html('')
     },3000)
 });
-
