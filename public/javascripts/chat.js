@@ -1,16 +1,45 @@
 $("document").ready(function(){
+
+    $("#message").emojioneArea({
+      pickerPosition : "right"
+    })
+
+    $("#ashis").on('click',()=>{
+      $("#ashis").toggleClass("as-a")
+    })
+
+    var header = $(".header")  
     var socket = io()
 
     const username = $("#username").val();
 
-    socket.on("chat", addChat)
     socket.emit('username', username);
     socket.emit("onlineUsers");
+    $("#message").on("keypress",()=>{
+      socket.emit("typing",$("#name").val())
+    })
+    
+    socket.on("chat", addChat)
+    socket.on('typing',(data) => {
+      header.html(`<p><em> ${data} is typing a message...</em></p>`);
+    })
+    
+    //to be deleted after fix user online
+    s = ''
+    $.each([1,2,3,4,1,2,],(a,b) => {
+      s += `<div class="chat_list">
+      <div class="chat_people">
+        <div class="chat_img"></div>
+        <div class="chat_ib"> ${b} </div>
+        <span class="online_icon"></span>
+      </div>
+    </div>
+  ` 
 
-    // socket.on("offline",(user) => {
-    //   console.log(user);
-    // })
-    socket.on('online', function(user) {
+
+    })
+    
+    socket.on('online', (user) => {
         let str = ""
         let msg = ``
         $.each(user,(key,name)=>{
@@ -26,9 +55,12 @@ $("document").ready(function(){
             str += msg
           }
         });
-        $('#onlineUSers').html(str)
+        
+        //$('#onlineUSers').html(str)
     });
-
+    //to be deleted after fix user online
+    $('#onlineUSers').html(s)
+    
     function getChats() {
          $.get("/api/chat", (chats) => {
              chats.forEach(addChat)
@@ -38,17 +70,28 @@ $("document").ready(function(){
 
     function postChat(chat){
       $.post("/api/chat", chat,()=>{
-        $("#message").val("")
+        //$("#message").val("")
+        $(".emojionearea-editor").html("")
       })
     }
 
     function addChat(chatObj){
-        let msg=''
+        let time = new Date(Number(chatObj.time) || 0);
+        let day = ""
+        if(time.toLocaleDateString() == new Date().toLocaleDateString()){
+          day = "Today"
+        } else if(time.toLocaleDateString() == new Date(new Date().setDate(new Date().getDate()-1)).toLocaleDateString()){
+          day='Yesterday'
+        } else{
+          x = time.toDateString().substr(4).split(" ")
+          day = `${x[1]} ${x[0]},${x[2]}`
+        }
+                        
         if(chatObj.username == username){
           msg = `<div class="outgoing_msg">
                     <div class="sent_msg">
                       <p>${chatObj.message}</p>
-                      <span class="time_date"> 11:01 AM    |    June 9</span>
+                      <span class="time_date"> ${time.toLocaleTimeString()}    |   ${day} </span>
                     </div>
                   </div>`;
           $("#messages").append(msg)
@@ -58,12 +101,14 @@ $("document").ready(function(){
                     <div class="received_msg">
                       <div class="received_withd_msg">
                         <p>${chatObj.message}</p>
-                        <span class="time_date"> 11:01 AM    |    June 9</span>
+                        <span class="time_date"> ${time.toLocaleTimeString()}    |   ${day}</span>
                       </div>
                     </div>
                   </div>`;
           $("#messages").append(msg);
+          //$("#messages").animate({ scrollTop: document.getElementById("messages").scrollHeight }, "slow");
         }
+        $("#messages").animate({ scrollTop: document.getElementById("messages").scrollHeight}, 5);
     }
 
     $("#send").click((e) => {
@@ -74,5 +119,10 @@ $("document").ready(function(){
             message: $("#message").val()
         }
         postChat(chatMessage)
-    })
-  })
+    });
+
+    setInterval(()=>{
+      header.html("")
+    },3000)
+});
+

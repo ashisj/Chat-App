@@ -3,23 +3,32 @@
         <div class="header"></div>
         <div id="messages"></div>
         <form class="row" style="margin-top: 2px">
-        <div class="col-sm-11">
-            <input id="name" type="hidden" value="{{user.name}}">
-            <input id="username" type="hidden" value="{{user.username}}">
-            <input id="message" autocomplete="off" autofocus="on" placeholder="type your message here..." class="form-control" />
-        </div>
-        <div class="col-sm-1">
-            <button id="send" class="btn btn-success" style="padding: auto 4px; float:right">Send</button>
-        </div>
+            <div class="col-sm-11">
+                <input id="name" type="hidden" value="{{user.name}}">
+                <input id="username" type="hidden" value="{{user.username}}">
+            
+                <input id="message" autocomplete="off" autofocus="on" placeholder="type your message here..." class="form-control"/>
+
+                <!-- <textarea id="message" autocomplete="off" autofocus="on" placeholder="type your message here..." class="form-control"/></textarea> -->
+            </div>
+            <div class="col-sm-1">
+                <button id="send" class="btn btn-success" style="padding: auto 4px; float:right">Send</button>
+            </div>
         </form>
     </div>
     <div class="col-sm-3">
-        <div class="inbox_msg"
-            <div id="onlineUSers"></div>
+        <div class="chat-users">
+            <button data-toggle="collapse" data-target="#onlineUSers" id="ashis" class="btn btn-primary btn-block as-a">Online Users</button>
+            <div id="onlineUSers" class="collapse"></div>
         </div>
     </div>
 </div>
+<div class="a"></div>
 <script src="/socket.io/socket.io.js"></script>
 
 {{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script> --}}
 <script src='/javascripts/chat.js'/></script>
+{{!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/css/basic/emojify.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/js/emojify.min.js"></script> --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.js"></script>

@@ -4,6 +4,7 @@ var Chat = require('../models/chatModel');
 
 exports.addChart = async (req,res,next) => {
     try {
+        req.body.time = String(new Date().getTime())
         var chat = new Chat(req.body)
         await chat.save()
         res.sendStatus(200)
