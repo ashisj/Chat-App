@@ -13,7 +13,7 @@ $(document).ready(function(){
                 window.location.replace('/')
             },
             error:function(error){
-                loginMessage.html(error.responseJSON.message) 
+                loginMessage.html(error.responseJSON.message)
             }
         })
     })

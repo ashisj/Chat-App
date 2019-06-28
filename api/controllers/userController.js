@@ -84,8 +84,11 @@ exports.login = (req,res,next) => {
             email:user.email,
             username:user.username,
             name:user.name
-          },
-          process.env.JWT_PRIVATE_KEY
+           },
+          process.env.JWT_PRIVATE_KEY,
+          {
+            expiresIn: 180*60*1000
+          }
         );
         req.session.user = token;
         return res.status(200).json({message:"Authentication successfull"})

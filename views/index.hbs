@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-sm-12">
         <div class="header"></div>
         <div id="messages"></div>
         <div class="row" style="padding-top: 2px">
@@ -13,41 +13,29 @@
                     </div>
                     <div class="col-sm-1">
                         <button id="send" class="btn btn-success" style="padding: auto 4px; float:right">
-                            <i class="fa fa-paper-plane" aria-hidden="true"></i>    
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
             </form>
             <div class="col-sm-1">
-
-                <input type="file" id="myFileInput" />
-                <button class="btn btn-success btn-flat" id="fileInput">
+                <input type="file" id="fileInput" />
+                <button class="btn btn-success btn-flat" id="fileInputButton">
                     <i class="glyphicon glyphicon-paperclip"></i>
-                </button>                    
-            </div>        
+                </button>
+            </div>
         </div>
     </div>
-    <div class="col-sm-3">
+
         <div class="chat-users">
-          <div id = "sipu">
+          <div class = "chat-users-details">
             <button data-toggle="collapse" data-target="#onlineUSers" id="onlineUsersButton" class="btn btn-primary btn-block online-user-button-position">Online Users</button>
             <div id="onlineUSers" class="collapse"></div>
           </div>
         </div>
-    </div>
+
 </div>
-<form id="alpha">
-    <input type="file" name="as">
-    <input type="submit" value="ok">
-</form>
-<script>
-    $("#alpha").on('submit',(e) => {
-        e.preventDefault();
-        $.ajax({
-            url:
-        })
-    } )
-</script>
+<div id="a"></div>
 
 <script src="/socket.io/socket.io.js"></script>
 

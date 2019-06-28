@@ -5,6 +5,7 @@ $('document').ready(function(){
     const messageBox = $("#messages");
     const msgForm = $('#msgForm');
     const header = $('.header');
+    const fileInputButton = $('#fileInputButton');
     const fileInput = $('#fileInput');
     const username = $("#username").val();
     const name = $("#name").val();
@@ -43,9 +44,10 @@ $('document').ready(function(){
             str += msg
           }
         });
+
         if(str == ''){
-            onlineUsers.html("No one is available");
-        } else{
+             onlineUsers.html("No user is available now");
+         } else{
             onlineUsers.html(str);
         }
     });
@@ -73,6 +75,7 @@ $('document').ready(function(){
 
     function addChat(chatObj){
         header.html('')
+        console.log(chatObj);
         let time = new Date(Number(chatObj.time) || 0);
         let day = ''
         if(time.toLocaleDateString() == new Date().toLocaleDateString()){
@@ -84,6 +87,9 @@ $('document').ready(function(){
           day = `${x[1]} ${x[0]},${x[2]}`
         }
 
+        if(chatObj.media){
+          chatObj.message = `<img class="chat-img" src=${chatObj.mediapath} alt="File not available anymore">`
+        }
         if(chatObj.username == username){
           msg = `<div class="outgoing_msg">
                     <div class="sent_msg">
@@ -117,14 +123,32 @@ $('document').ready(function(){
         postChat(chatMessage)
     });
 
-    fileInput.on('click',(e)=>{
-      $('#myFileInput').click();
-    })
-    $('#myFileInput').on('change',(file) =>{
-       var fileName = file.target.value.split('\\')[file.target.value.split('\\').length - 1];
-      
-    });    
-  setInterval(()=>{
-      header.html('')
-    },3000)
+    fileInputButton.on('click',(e)=>{
+      fileInput.click();
+    });
+
+    fileInput.on('change',(e) =>{
+      e.preventDefault();
+      formdata = new FormData();
+      file =fileInput[0].files[0];
+      formdata.append("myFile", file);
+      formdata.append("username", username);
+      formdata.append("name", name);
+      $.ajax({
+          url : 'api/chat/media',
+          type : 'POST',
+          data : formdata,
+          processData: false,  // tell jQuery not to process the data
+          contentType: false,  // tell jQuery not to set contentType
+          success : function(result){
+            console.log(result);
+            fileInput.val("")
+          }
+      })
+
+    });
+
+    setInterval(()=>{
+        header.html('');
+    },3000);
 });

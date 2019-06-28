@@ -15,6 +15,13 @@ exports.addChart = async (req,res,next) => {
     }
 }
 
+exports.addMedia = async (req,res,next) => {
+    req.body.message = "File not present any more"
+    req.body.mediapath = req.file.path.replace("public","")
+    req.body.media = true
+    next();
+}
+
 exports.getChart = async(req,res,next) => {
     Chat.find({}, (error, chats) => {
         if(error){

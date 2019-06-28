@@ -5,6 +5,8 @@ var chatSchema = new Schema({
     username:{type:String,required:true},
     name:{type:String,required:true},
     message:{type:String,required:true},
+    mediapath:{type:String,required:false},
+    media:{type:Boolean,default:false},
     time:{type:String,required:true},
 })
 
