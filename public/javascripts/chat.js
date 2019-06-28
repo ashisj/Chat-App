@@ -10,7 +10,9 @@ $('document').ready(function(){
     const username = $("#username").val();
     const name = $("#name").val();
 
-    var onlineUsersData ={}
+    var onlineUsersData ={};
+    var newUserMsg = '';
+    var newUserMsgStatus = true;
 
     const socket = io()
 
@@ -35,9 +37,7 @@ $('document').ready(function(){
           if(key != username){
             msg = `<div class="chat_list">
                       <div class="chat_people">
-                        <div class="chat_img"></div>
-                        <div class="chat_ib"> ${name} </div>
-                        <span class="online_icon"></span>
+                        ${name}
                       </div>
                     </div>
                   `
@@ -53,7 +53,7 @@ $('document').ready(function(){
     });
 
     onlineUsersButton.on('click',()=>{
-      onlineUsersButton.toggleClass('online-user-button-position')
+      onlineUsersButton.toggleClass('online_user_button_position')
     })
     messageInput.on('keypress',()=>{
       socket.emit('typing',name)
@@ -74,10 +74,19 @@ $('document').ready(function(){
     }
 
     function addChat(chatObj){
-        header.html('')
-        console.log(chatObj);
+        let msg = ''
         let time = new Date(Number(chatObj.time) || 0);
         let day = ''
+
+        header.html('')
+
+        if(newUserMsg !=  chatObj.username){
+            newUserMsg = chatObj.username;
+            newUserMsgStatus = true;
+        } else {
+          newUserMsgStatus = false;
+        }
+
         if(time.toLocaleDateString() == new Date().toLocaleDateString()){
           day = 'Today'
         } else if(time.toLocaleDateString() == new Date(new Date().setDate(new Date().getDate()-1)).toLocaleDateString()){
@@ -88,8 +97,9 @@ $('document').ready(function(){
         }
 
         if(chatObj.media){
-          chatObj.message = `<img class="chat-img" src=${chatObj.mediapath} alt="File not available anymore">`
+          chatObj.message = `<img class="chat_img" src=${chatObj.mediapath} alt="File not available anymore">`
         }
+
         if(chatObj.username == username){
           msg = `<div class="outgoing_msg">
                     <div class="sent_msg">
@@ -97,10 +107,9 @@ $('document').ready(function(){
                       <span class="time_date"> ${time.toLocaleTimeString()}    |   ${day} </span>
                     </div>
                   </div>`;
-          messageBox.append(msg)
         } else {
           msg = `<div class="incoming_msg">
-                    <div class="incoming_msg_img">${chatObj.name} </div>
+                    <div class="incoming_msg_name">${ newUserMsgStatus ? chatObj.name.split(' ')[0] : ''} </div>
                     <div class="received_msg">
                       <div class="received_withd_msg">
                         <p>${chatObj.message}</p>
@@ -108,8 +117,8 @@ $('document').ready(function(){
                       </div>
                     </div>
                   </div>`;
-          messageBox.append(msg);
         }
+        messageBox.append(msg);
         messageBox.animate({ scrollTop: document.getElementById('messages').scrollHeight}, 5);
     }
 
