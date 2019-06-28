@@ -5,8 +5,10 @@ $('document').ready(function(){
     const messageBox = $("#messages");
     const msgForm = $('#msgForm');
     const header = $('.header');
+    const fileInput = $('#fileInput');
     const username = $("#username").val();
     const name = $("#name").val();
+
     var onlineUsersData ={}
 
     const socket = io()
@@ -115,7 +117,14 @@ $('document').ready(function(){
         postChat(chatMessage)
     });
 
-    setInterval(()=>{
+    fileInput.on('click',(e)=>{
+      $('#myFileInput').click();
+    })
+    $('#myFileInput').on('change',(file) =>{
+       var fileName = file.target.value.split('\\')[file.target.value.split('\\').length - 1];
+      
+    });    
+  setInterval(()=>{
       header.html('')
     },3000)
 });

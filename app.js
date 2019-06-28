@@ -83,7 +83,7 @@ app.use(session({
   resave : false,
   saveUnintialized : false,
   store : new MongoStore({mongooseConnection : mongoose.connection }),
-  cookie: {maxAge:180*60*1000}
+  // cookie: {maxAge:180*60*1000}
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -94,6 +94,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/image',(req,res,next) => {
+  console.log(req.body);
+})
 app.use('/api/chat', chatApiRoute);
 app.use('/api/user', userApiRoute);
 app.use('/', indexRouter);

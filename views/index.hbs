@@ -2,17 +2,30 @@
     <div class="col-sm-9">
         <div class="header"></div>
         <div id="messages"></div>
-        <form class="row" style="margin-top: 2px" id="msgForm">
-            <div class="col-sm-11">
-                <input id="name" type="hidden" value="{{user.name}}">
-                <input id="username" type="hidden" value="{{user.username}}">
+        <div class="row" style="padding-top: 2px">
+            <form class="col-sm-11" id="msgForm">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <input id="name" type="hidden" value="{{user.name}}">
+                        <input id="username" type="hidden" value="{{user.username}}">
 
-                <input id="message" autocomplete="off" autofocus="on" placeholder="type your message here..." class="form-control"/>
-            </div>
+                        <input id="message" autocomplete="off" autofocus="on" placeholder="type your message here..." class="form-control"/>
+                    </div>
+                    <div class="col-sm-1">
+                        <button id="send" class="btn btn-success" style="padding: auto 4px; float:right">
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>    
+                        </button>
+                    </div>
+                </div>
+            </form>
             <div class="col-sm-1">
-                <button id="send" class="btn btn-success" style="padding: auto 4px; float:right">Send</button>
-            </div>
-        </form>
+
+                <input type="file" id="myFileInput" />
+                <button class="btn btn-success btn-flat" id="fileInput">
+                    <i class="glyphicon glyphicon-paperclip"></i>
+                </button>                    
+            </div>        
+        </div>
     </div>
     <div class="col-sm-3">
         <div class="chat-users">
@@ -23,10 +36,20 @@
         </div>
     </div>
 </div>
+<form id="alpha">
+    <input type="file" name="as">
+    <input type="submit" value="ok">
+</form>
+<script>
+    $("#alpha").on('submit',(e) => {
+        e.preventDefault();
+        $.ajax({
+            url:
+        })
+    } )
+</script>
 
 <script src="/socket.io/socket.io.js"></script>
-
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="/stylesheets/emoji/jquery.emojipicker.css">
 
