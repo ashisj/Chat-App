@@ -101,3 +101,25 @@
 #fileInput {
   display:none;
 }
+.modal-content{
+  width: 300px;
+  height: 300px;
+  position: relative;
+  margin: auto;
+  display: none;
+}
+
+.spinner{
+  position: absolute;
+  top: 30%;
+  left: 30%;
+}
+
+@media (max-height: 600px) {
+  .message_box{
+    height: 70vh;
+  }
+  .chat_users_details{
+   height: 70vh; 
+  }
+}

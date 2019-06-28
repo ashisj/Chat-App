@@ -9,15 +9,15 @@ const storage = multer.diskStorage({
         cb(null,'public/uploads');
     },
     filename:function(req,file,cb){
-      console.log(file);
-        cb(null,file.fieldname + '-' + Date.now());
+        //cb(null,file.fieldname + '-' + Date.now());
+        cb(null,Date.now()+'.'+file.originalname.split('.')[1]);
     }
 });
 
 const upload = multer({
     storage:storage ,
     limits:{
-        fileSize:1024 * 1024 * 5
+        fileSize:1024 * 1024 * 30
     }
 });
 

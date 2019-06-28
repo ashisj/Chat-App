@@ -9,7 +9,7 @@ router.use(csrfProtection);
 
 /* GET home page. */
 router.get('/', isLoggedIn,Authorization,function(req, res, next) { 
-  res.render('index', { title: 'Express' , user : req.userData});
+  res.render('index', { title: 'ChatApp' , user : req.userData});
 });
 
 router.get('/logout',isLoggedIn, (req, res) => {

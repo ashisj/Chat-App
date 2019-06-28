@@ -7,14 +7,17 @@ $('document').ready(function(){
     const header = $('.header');
     const fileInputButton = $('#fileInputButton');
     const fileInput = $('#fileInput');
+    const modal = $('.modal-content');
     const username = $("#username").val();
     const name = $("#name").val();
+
 
     var onlineUsersData ={};
     var newUserMsg = '';
     var newUserMsgStatus = true;
 
     const socket = io()
+    const maxFileSize = 1024 * 1024 * 30//30*(10**6)
 
     messageInput.emojiPicker({
       width: messageInput.width(),
@@ -60,16 +63,37 @@ $('document').ready(function(){
     })
 
     function getChats() {
-         $.get('/api/chat', (chats) => {
-             chats.forEach(addChat)
-         })
+      $.ajax({
+        url:'/api/chat',
+        type:'GET',
+        beforeSend: function() {
+          modal.show();
+        },
+        success:function(chats){
+          chats.forEach(addChat)
+          modal.hide();
+        },
+        error:function(error){
+          modal.hide();
+          alert("Failed to import previous chat")
+        }
+      })
     }
 
     getChats();
 
     function postChat(chat){
-      $.post('/api/chat', chat,()=>{
-        messageInput.val("")
+      $.ajax({
+        url:'/api/chat',
+        type:'POST',
+        data:chat,
+        success:function(response){
+          messageInput.val("")
+        },
+        error:function(error){
+          alert("Message sending failed")
+          messageInput.val("")
+        }
       })
     }
 
@@ -97,7 +121,23 @@ $('document').ready(function(){
         }
 
         if(chatObj.media){
-          chatObj.message = `<img class="chat_img" src=${chatObj.mediapath} alt="File not available anymore">`
+            if(chatObj.msgtype == 'image/jpeg' || chatObj.msgtype == 'image/png'){
+              chatObj.message =  `<img class="chat_img" src=${chatObj.mediapath} alt="File not available anymore">`
+            } else if(chatObj.msgtype == 'audio/mp3'){
+              chatObj.message =`<audio class="chat_img" controls>
+                                  <source src=${chatObj.mediapath} type="audio/mpeg"></source>
+                                </audio>`
+            } else if(chatObj.msgtype == 'video/mp4'){
+              chatObj.message =`<video class="chat_img" controls>
+                                  <source src=${chatObj.mediapath} type="video/mp4"></source>
+                                </video>`
+            }
+           
+           //`<embed src=${chatObj.mediapath}>`
+          //`<img class="chat_img" src=${chatObj.mediapath} alt="File not available anymore">`
+
+          
+  
         }
 
         if(chatObj.username == username){
@@ -140,10 +180,17 @@ $('document').ready(function(){
       e.preventDefault();
       formdata = new FormData();
       file =fileInput[0].files[0];
+      
       formdata.append("myFile", file);
       formdata.append("username", username);
       formdata.append("name", name);
-      $.ajax({
+      
+      if(file.size > maxFileSize){
+        alert("File size is too large")
+      } else if (!(file.type == 'image/jpeg' || file.type == 'image/png' || file.type =='audio/mp3' || file.type =='video/mp4')){
+        alert("Unsupported file")
+      } else{
+        $.ajax({
           url : 'api/chat/media',
           type : 'POST',
           data : formdata,
@@ -152,9 +199,15 @@ $('document').ready(function(){
           success : function(result){
             console.log(result);
             fileInput.val("")
+          },
+          error:function(error){
+            console.log(error);
+            
+            alert("file upload failed");
+            fileInput.val("")
           }
-      })
-
+        })
+      } 
     });
 
     setInterval(()=>{
