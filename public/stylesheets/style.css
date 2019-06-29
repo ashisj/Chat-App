@@ -80,9 +80,9 @@
 
 .chat_users_details{
   position: absolute;
-  bottom: 25px;
+  bottom: 10px;
   width: 250px;
-  right: 20px;
+  right: 25px;
   height: 80vh;
 }
 
@@ -114,21 +114,73 @@
   top: 30%;
   left: 30%;
 }
+.overlay_class{
+  z-index: 1;
+}
 
-@media (max-height: 600px) and (min-height: 480px) {
+@media screen and (max-device-width: 640px){
   .message_box{
-    height: 70vh;
+    height: 60vh;
+    width: 80%;
+    margin-left: 10%;
   }
   .chat_users_details{
-   height: 70vh; 
+    height: 60vh; 
+   }
+}
+
+/* #### Mobile Phones Portrait #### */
+@media screen and (max-device-width: 480px) and (orientation: portrait){
+  /* some CSS here */
+  .message_box{
+    height: 60vh;
+    width: 100%;
   }
 }
 
-@media (max-height: 480px) {
+@media screen and (max-device-width: 640px) and (orientation: landscape){
+  /* some CSS here */
   .message_box{
-    height: 50vh;
+    height: 30vh;
+    width: 80%;
+    margin-left: 10%;
   }
   .chat_users_details{
-   height: 50vh; 
+    height: 50vh; 
+   }
+}
+
+@media screen and (max-device-width: 768px) and (orientation: landscape){
+  .message_box{
+    height: 50vh;
+    width: 80%;
+    margin-left: 10%;
   }
+  .chat_users_details{
+    height: 50vh; 
+    bottom: 15px;
+  }
+}
+
+@media screen and (min-device-width: 768px) and (max-device-width: 1024px){
+  .message_box{
+    height: 70vh;
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+
+
+
+/* #### Desktops #### */
+@media screen and (min-width: 1024px){
+  /* some CSS here */
+  .message_box{
+    height: 70vh;
+    width: 80%;
+    margin-left: 10%;
+  }
+  .chat_users_details{
+   height: 80vh; 
+  }  
 }

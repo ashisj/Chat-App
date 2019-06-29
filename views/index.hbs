@@ -1,23 +1,27 @@
 <div class="row">
+    <div class = "chat_users_details">
+      <button data-toggle="collapse" data-target="#onlineUSers" id="onlineUsersButton" class="btn btn-primary btn-block online_user_button_position">Online Users</button>
+      <div id="onlineUSers" class="collapse"></div>
+    </div>
     <div class="col-xs-12 message_box">
         <div class="header"></div>
         <div id="messages" class="messages"></div>
         <div class="row" style="padding-top: 2px">
-          <div class="col-xs-1">
-              <input type="file" id="fileInput" />
-              <button class="btn btn-success btn-flat" id="fileInputButton">
+            <div class="col-sm-1">
+                <input type="file" id="fileInput" />
+                <button class="btn btn-success btn-flat" id="fileInputButton">
                   <i class="glyphicon glyphicon-paperclip"></i>
-              </button>
-          </div>
-            <form class="col-xs-11" id="msgForm">
+                </button>
+            </div>
+            <form class="col-sm-11" id="msgForm">
                 <div class="row">
-                    <div class="col-xs-11">
+                    <div class="col-sm-11">
                         <input id="name" type="hidden" value="{{user.name}}">
                         <input id="username" type="hidden" value="{{user.username}}">
 
                         <input id="message" autocomplete="off" autofocus="on" placeholder="type your message here..." class="form-control"/>
                     </div>
-                    <div class="col-xs-1">
+                    <div class="col-sm-1">
                         <button id="send" class="btn btn-success pull-right" style="padding: auto 4px;">
                             <i class="fa fa-paper-plane" aria-hidden="true"></i>
                         </button>
@@ -25,11 +29,6 @@
                 </div>
             </form>
         </div>
-    </div>
-
-    <div class = "chat_users_details">
-      <button data-toggle="collapse" data-target="#onlineUSers" id="onlineUsersButton" class="btn btn-primary btn-block online_user_button_position">Online Users</button>
-      <div id="onlineUSers" class="collapse"></div>
     </div>
     <div class="modal-content">
         <div class="spinner">

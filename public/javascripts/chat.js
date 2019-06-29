@@ -55,8 +55,10 @@ $('document').ready(function(){
         }
     });
 
-    onlineUsersButton.on('click',()=>{
-      onlineUsersButton.toggleClass('online_user_button_position')
+    onlineUsersButton.on('click',(e)=>{
+      $(".chat_users_details").toggleClass('overlay_class')
+      
+      onlineUsersButton.toggleClass('online_user_button_position');
     })
     messageInput.on('keypress',()=>{
       socket.emit('typing',name)
@@ -158,12 +160,15 @@ $('document').ready(function(){
 
     msgForm.submit((e) =>{
         e.preventDefault();
-        var chatMessage = {
+        if(messageInput.val() != ''){
+          var chatMessage = {
             name : name,
             username: username,
             message: messageInput.val()
+          }
+          postChat(chatMessage)
         }
-        postChat(chatMessage)
+        
     });
 
     fileInputButton.on('click',(e)=>{
