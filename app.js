@@ -1,3 +1,5 @@
+const port = process.env.PORT || 3000;
+
 var createError = require('http-errors');
 var express = require('express');
 var app = express();
@@ -116,6 +118,6 @@ app.use(function(err, req, res, next) {
 
 //"start": "nodemon ./bin/www"
 //module.exports = app;
-const server = http.listen(3000,()=>{
-  console.log("Listening to the port:3000");
+const server = http.listen(port,()=>{
+  console.log("Listening");
 })
