@@ -115,11 +115,20 @@
   left: 30%;
 }
 
-@media (max-height: 600px) {
+@media (max-height: 600px) and (min-height: 480px) {
   .message_box{
     height: 70vh;
   }
   .chat_users_details{
    height: 70vh; 
+  }
+}
+
+@media (max-height: 480px) {
+  .message_box{
+    height: 50vh;
+  }
+  .chat_users_details{
+   height: 50vh; 
   }
 }

@@ -5,7 +5,7 @@ var Chat = require('../models/chatModel');
 exports.addChart = async (req,res,next) => {
     try {
         req.body.time = String(new Date().getTime())
-        var chat = new Chat(req.body1)
+        var chat = new Chat(req.body)
         await chat.save()
         res.sendStatus(200)
         io.emit("chat", req.body)

@@ -132,12 +132,6 @@ $('document').ready(function(){
                                   <source src=${chatObj.mediapath} type="video/mp4"></source>
                                 </video>`
             }
-           
-           //`<embed src=${chatObj.mediapath}>`
-          //`<img class="chat_img" src=${chatObj.mediapath} alt="File not available anymore">`
-
-          
-  
         }
 
         if(chatObj.username == username){
