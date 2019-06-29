@@ -1,5 +1,3 @@
-const port = process.env.PORT || 3000;
-
 var createError = require('http-errors');
 var express = require('express');
 var app = express();
@@ -12,6 +10,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
+var port = process.env.PORT || 3000;
 
 var http = require("http").Server(app)
 global.io= require("socket.io")(http)

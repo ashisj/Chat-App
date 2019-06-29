@@ -196,12 +196,9 @@ $('document').ready(function(){
           processData: false,  // tell jQuery not to process the data
           contentType: false,  // tell jQuery not to set contentType
           success : function(result){
-            console.log(result);
             fileInput.val("")
           },
-          error:function(error){
-            console.log(error);
-            
+          error:function(error){            
             alert("file upload failed");
             fileInput.val("")
           }

@@ -118,7 +118,7 @@
   z-index: 1;
 }
 
-@media screen and (max-device-width: 640px){
+/* @media screen and (max-device-width: 640px){
   .message_box{
     height: 60vh;
     width: 80%;
@@ -127,7 +127,7 @@
   .chat_users_details{
     height: 60vh; 
    }
-}
+} */
 
 /* #### Mobile Phones Portrait #### */
 @media screen and (max-device-width: 480px) and (orientation: portrait){
